@@ -816,7 +816,7 @@ ItemId (all Single-line Text) and EventData (Multiline Text).
 
 const SP_CONFIG = {
     enabled: true,
-    siteUrl: '', // e.g. 'https://bryten.sharepoint.com/sites/Central' 
+    siteUrl: 'https://aptvault.sharepoint.com/', // e.g. 'https://bryten.sharepoint.com/sites/Central' 
     listUpdates: 'BrytenUpdates',
     listKb: 'BrytenKB',
     listTrash: 'BrytenTrash',
