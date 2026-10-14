@@ -972,10 +972,10 @@ function saveTrashLocal() { lsSet('bc_trash_items', trashItems); }
 function saveTrashKbLocal() { lsSet('bc_trash_kb_items', trashKbItems); }
 
 async function initData() {
-    items = await loadCollection('bc_items', SEED_ITEMS, process.env.SHAREPOINT_LIST_UPDATES_ID, 'items');
-    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, process.env.SHAREPOINT_LIST_KB_ID, 'kb');
-    trashItems = await loadCollection('bc_trash_items', [], process.env.SHAREPOINT_LIST_TRASH_ID, 'trash');
-    trashKbItems = await loadCollection('bc_trash_kb_items', [], process.env.SHAREPOINT_LIST_KBTRASH_ID, 'kbTrash');
+    items = await loadCollection('bc_items', SEED_ITEMS, SP_CONFIG.listUpdates, 'items');
+    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, SP_CONFIG.BrytenKB, 'kb');
+    trashItems = await loadCollection('bc_trash_items', [], SP_CONFIG.BrytenTrash, 'trash');
+    trashKbItems = await loadCollection('bc_trash_kb_items', [], SP_CONFIG.BrytenKBTrash, 'kbTrash');
     const allIds = items.concat(trashItems).map(i => i.id);
     const allKbIds = kbItems.concat(trashKbItems).map(i => i.id);
     nid = 1 + Math.max(24, ...allIds, 0);

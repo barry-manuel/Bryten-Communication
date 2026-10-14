@@ -4,6 +4,16 @@ const { Client } = require('@microsoft/microsoft-graph-client');
 const { TokenCredentialAuthenticationProvider } = require('@microsoft/microsoft-graph-client/authProviders/azureTokenCredentials');
 require('isomorphic-fetch');
 
+function spListMap(name) {
+    const list = [];
+    list['BrytenUpdates'] = process.env.SHAREPOINT_LIST_UPDATES_ID;
+    list['BrytenKB'] = process.env.SHAREPOINT_LIST_KB_ID;
+    list['BrytenTrash'] = process.env.SHAREPOINT_LIST_TRASH_ID;
+    list['BrytenKBTrash'] = process.env.SHAREPOINT_LIST_KBTRASH_ID;
+
+    return list[name];
+}
+
 app.http('getSharePointList', {
     methods: ['GET'],
     authLevel: 'function',
@@ -26,7 +36,7 @@ app.http('getSharePointList', {
         const graphClient = Client.initWithMiddleware({ authProvider });
 
         const siteId = process.env.SHAREPOINT_SITE_ID;
-        const listId = request.query.get('list'); //process.env.SHAREPOINT_LIST_ID
+        const listId = spListMap(request.query.get('list'));
 
         try {
             // 3. Query the list items and expand 'fields' to grab the actual column data
