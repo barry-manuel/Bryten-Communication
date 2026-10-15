@@ -973,9 +973,9 @@ function saveTrashKbLocal() { lsSet('bc_trash_kb_items', trashKbItems); }
 
 async function initData() {
     items = await loadCollection('bc_items', SEED_ITEMS, SP_CONFIG.listUpdates, 'items');
-    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, SP_CONFIG.BrytenKB, 'kb');
-    trashItems = await loadCollection('bc_trash_items', [], SP_CONFIG.BrytenTrash, 'trash');
-    trashKbItems = await loadCollection('bc_trash_kb_items', [], SP_CONFIG.BrytenKBTrash, 'kbTrash');
+    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, SP_CONFIG.listKb, 'kb');
+    trashItems = await loadCollection('bc_trash_items', [], SP_CONFIG.listTrash, 'trash');
+    trashKbItems = await loadCollection('bc_trash_kb_items', [], SP_CONFIG.listKbTrash, 'kbTrash');
     const allIds = items.concat(trashItems).map(i => i.id);
     const allKbIds = kbItems.concat(trashKbItems).map(i => i.id);
     nid = 1 + Math.max(24, ...allIds, 0);
