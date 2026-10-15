@@ -847,7 +847,7 @@ async function spGetAll(listName) {
 
 async function spCreate(listName, obj) {
     try {
-        const response = await fetch('/api/spItemCreate', {
+        const response = await fetch('/api/spItemCreate?list=' + listName, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
