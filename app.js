@@ -363,6 +363,7 @@ function sAdmins(a) {
 }
 
 ADMINS = gAdmins();
+
 const CATS = {
     events: {
         label: {
@@ -845,18 +846,26 @@ async function spGetAll(listName) {
 }
 
 async function spCreate(listName, obj) {
-    const digest = await spDigest();
-    const res = await fetch(SP_CONFIG.siteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items", {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json;odata=verbose', 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': digest
-        },
-        body: JSON.stringify({
-            Title: String(obj.title || obj.id), ItemKey: obj.id, Payload: JSON.stringify(obj)
-        })
-    });
-    return res.json();
+    try {
+        const response = await fetch('/api/spItemCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Title: String(obj.title || obj.id), ItemKey: obj.id, Payload: JSON.stringify(obj)})
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! Created Item ID:", data.id);
+        } else {
+            console.error("Failed to add item:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+
+    return response.json();
 }
 
 async function spUpdate(listName, spId, obj) {
@@ -1205,7 +1214,8 @@ function doLogin() {
     const u = document.getElementById('lu').value.trim(), p = document.getElementById('lp').value;
     const rec = ADMINS[u];
     if (rec && rec.password === p) {
-        adminMode = true; curUser = u;
+        adminMode = true; 
+        curUser = u;
         curRole = rec.role;
         closeLogin();
         applyAdmin();
@@ -1278,7 +1288,8 @@ function addAdmin() {
     sAdmins(ADMINS);
     document.getElementById('naName').value = '';
     document.getElementById('naUser').value = '';
-    document.getElementById('naPass').value = ''; renderAdmList();
+    document.getElementById('naPass').value = ''; 
+    renderAdmList();
 }
 
 function removeAdmin(u) {
