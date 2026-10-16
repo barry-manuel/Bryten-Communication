@@ -29,8 +29,6 @@ app.http('spItemCreate', {
         const siteId = process.env.SHAREPOINT_SITE_ID;
         const listId = spListMap(request.query.get('list'));
 
-
-
         try {
             const body = await request.json();
             const listItem = {
@@ -48,7 +46,7 @@ app.http('spItemCreate', {
             return {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({result: result, payload: listItem, request: request})
+                body: JSON.stringify(result)
             };
         } catch (error) {
             context.log(`Error querying Graph API: ${error.message}`);

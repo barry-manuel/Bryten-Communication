@@ -842,7 +842,8 @@ async function spDigest() {
 
 async function spGetAll(listName) {
     const res = await fetch('/api/getsharepointlist?list=' + listName)
-    const data = await res.json(); return data.d.results;
+    const data = await res.json(); 
+    return data;
 }
 
 async function spCreate(listName, obj) {
