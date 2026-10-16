@@ -41,7 +41,7 @@ app.http('getSharePointList', {
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(result)
+                body: JSON.stringify(cleanData)
             };
 
         } catch (error) {
