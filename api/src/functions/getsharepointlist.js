@@ -32,7 +32,7 @@ app.http('getSharePointList', {
         try {
             // 3. Query the list items and expand 'fields' to grab the actual column data
             const result = await graphClient
-                .api(`/sites/${siteId}/lists/${listId}/items?expand=fields`)
+                .api(`/sites/${siteId}/lists/${listId}/items?$expand=fields`)
                 .get();
             
             // 4. Map and clean the data to only return the list columns
