@@ -7,7 +7,7 @@ require('isomorphic-fetch');
 
 app.http('spItemCreate', {
     methods: ['POST'],
-    authLevel: 'function',
+    authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log('Processing request to add the SharePoint List items.');
 
@@ -29,15 +29,18 @@ app.http('spItemCreate', {
         const siteId = process.env.SHAREPOINT_SITE_ID;
         const listId = spListMap(request.query.get('list'));
 
-        const listItem = {
-            fields: {
-                Title: request.body.Title,
-                ItemKey: request.body.ItemKey,
-                Payload: request.body.Payload
-            }
-        };
+
 
         try {
+            const body = await request.json();
+            const listItem = {
+                fields: {
+                    Title: body.Title,
+                    ItemKey: body.ItemKey,
+                    Payload: body.Payload
+                }
+            };
+
             const result = await graphClient
                 .api(`/sites/${siteId}/lists/${listId}/items`)
                 .post(listItem);
