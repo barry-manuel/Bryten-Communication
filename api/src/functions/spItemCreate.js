@@ -30,9 +30,7 @@ app.http('spItemCreate', {
         const listId = spListMap(request.query.get('list'));
 
         try {
-            const listItem = {
-                fields: request.body
-            };
+            const listItem = request.body;
             const result = await graphClient
                 .api(`/sites/${siteId}/lists/${listId}/items`)
                 .post(listItem );
