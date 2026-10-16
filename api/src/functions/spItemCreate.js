@@ -33,7 +33,7 @@ app.http('spItemCreate', {
             const listItem = request.body;
             const result = await graphClient
                 .api(`/sites/${siteId}/lists/${listId}/items`)
-                .post(listItem );
+                .post(listItem);
 
             return {
                 status: 201,
