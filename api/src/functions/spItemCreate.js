@@ -29,14 +29,15 @@ app.http('spItemCreate', {
         const siteId = process.env.SHAREPOINT_SITE_ID;
         const listId = spListMap(request.query.get('list'));
 
+        const listItem = {
+            fields: {
+                Title: request.body.Title,
+                ItemKey: request.body.ItemKey,
+                Payload: request.body.Payload
+            }
+        };
+
         try {
-            const listItem = {
-                fields: { 
-                    Title: request.body.Title,
-                    ItemKey: request.body.ItemKey,
-                    Payload: request.body.Payload
-                }
-            };
             const result = await graphClient
                 .api(`/sites/${siteId}/lists/${listId}/items`)
                 .post(listItem);
@@ -44,7 +45,7 @@ app.http('spItemCreate', {
             return {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({result: result, payload: listItem})
+                body: JSON.stringify({result: result, payload: listItem, request: request.body})
             };
         } catch (error) {
             context.log(`Error querying Graph API: ${error.message}`);
