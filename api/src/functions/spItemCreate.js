@@ -32,7 +32,7 @@ app.http('spItemCreate', {
         try {
             const listItem = request.body;
             const result = await graphClient
-                .api(`/sites/${siteId}/lists/${listId}/items?expand=fields`)
+                .api(`/sites/${siteId}/lists/${listId}/items?expand=fields(select=Title,ItemKey,Payload)`)
                 .post(listItem );
 
             return {
