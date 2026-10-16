@@ -38,11 +38,10 @@ app.http('getSharePointList', {
             // 4. Map and clean the data to only return the list columns
             const cleanData = result.value.map(item => item.fields);
 
-
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(cleanData)
+                body: JSON.stringify(result)
             };
 
         } catch (error) {
