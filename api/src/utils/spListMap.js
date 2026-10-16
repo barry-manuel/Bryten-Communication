@@ -7,3 +7,5 @@ function spListMap(name) {
 
     return list[name];
 }
+
+module.exports = { spListMap };
