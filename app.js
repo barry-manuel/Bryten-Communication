@@ -852,14 +852,7 @@ async function spCreate(listName, obj) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(
-                {
-                    fields: {
-                        Title: String(obj.title || obj.id), 
-                        ItemKey: obj.id, 
-                        Payload: JSON.stringify(obj)
-                    }
-                })
+            body: JSON.stringify({Title: String(obj.title || obj.id), ItemKey: obj.id, Payload: JSON.stringify(obj)})
         });
 
         if (response.ok) {
