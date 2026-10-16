@@ -44,7 +44,7 @@ app.http('spItemCreate', {
             return {
                 status: 201,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(result)
+                body: JSON.stringify({result: result, payload: listItem})
             };
         } catch (error) {
             context.log(`Error querying Graph API: ${error.message}`);
