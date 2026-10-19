@@ -942,7 +942,7 @@ async function loadCollection(lsKey, seed, spList, mapKey) {
             const rows = await spGetAll(spList);
             const parsed = rows.map(r => {
                 try {
-                    return JSON.parse(r);
+                    return JSON.parse(r.Payload);
                 } catch {
                     return null;
                 }
