@@ -906,10 +906,9 @@ async function spDelete(listName, spId) {
             },
             body: JSON.stringify({ ItemID: spId })
         });
-        console.log("Item Deleted:", response);
+
         if (response.ok) {
-            const data = await response.json();
-            console.log("Success! Deleted Item ID:", data.id);
+            console.log("Success! Deleted Item ID:", spId);
         } else {
             console.error("Failed to delete item:", await response.text());
         }
