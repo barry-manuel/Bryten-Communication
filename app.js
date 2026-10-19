@@ -870,19 +870,31 @@ async function spCreate(listName, obj) {
 }
 
 async function spUpdate(listName, spId, obj) {
-    const digest = await spDigest();
-    await fetch(SP_CONFIG.siteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items(" + spId + ")", {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json;odata=verbose', 'Content-Type': 'application/json;odata=verbose', 'X-RequestDigest': digest, 'X-HTTP-Method': 'MERGE', 'If-Match': '*'
-        },
-        body: JSON.stringify({
-            Title: String(obj.title || obj.id),
-            ItemKey: obj.id,
-            Payload: JSON.stringify(obj)
-        })
-    });
+    try {
+        await fetch('/api/spItemUpdate?list=' + listName, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Title: String(obj.title || obj.id),
+                ItemKey: obj.id,
+                ItemID: spId,
+                Payload: JSON.stringify(obj)
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! UpdatedItem ID:", data.id);
+        } else {
+            console.error("Failed to update item:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+
+    return response.json();
 }
 
 async function spDelete(listName, spId) {
@@ -965,7 +977,8 @@ async function pushDelete(spList, mapKey, objId) {
     const spId = SP_ID_MAP[mapKey][objId];
     if (!spId) return;
     try {
-        await spDelete(spList, spId); delete SP_ID_MAP[mapKey][objId];
+        await spDelete(spList, spId); 
+        delete SP_ID_MAP[mapKey][objId];
     } catch (e) {
         console.warn('SharePoint delete failed, change kept locally only:', e);
     }
