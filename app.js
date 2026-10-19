@@ -866,7 +866,7 @@ async function spCreate(listName, obj) {
         console.error("Network error:", error);
     }
 
-    return response.json();
+    return data;
 }
 
 async function spUpdate(listName, spId, obj) {
@@ -894,7 +894,7 @@ async function spUpdate(listName, spId, obj) {
         console.error("Network error:", error);
     }
 
-    return response.json();
+    return data;
 }
 
 async function spDelete(listName, spId) {
