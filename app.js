@@ -859,14 +859,14 @@ async function spCreate(listName, obj) {
         if (response.ok) {
             const data = await response.json();
             console.log("Success! Created Item ID:", data.id);
+
+            return data;
         } else {
             console.error("Failed to add item:", await response.text());
         }
     } catch (error) {
         console.error("Network error:", error);
     }
-
-    return await response.json();
 }
 
 async function spUpdate(listName, spId, obj) {
@@ -887,14 +887,14 @@ async function spUpdate(listName, spId, obj) {
         if (response.ok) {
             const data = await response.json();
             console.log("Success! UpdatedItem ID:", data.id);
+
+            return data;
         } else {
             console.error("Failed to update item:", await response.text());
         }
     } catch (error) {
         console.error("Network error:", error);
     }
-
-    return await response.json();
 }
 
 async function spDelete(listName, spId) {
