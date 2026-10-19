@@ -942,14 +942,13 @@ async function loadCollection(lsKey, seed, spList, mapKey) {
             const rows = await spGetAll(spList);
             const parsed = rows.map(r => {
                 try {
-                    console.log('SP row:', r);
-                    return JSON.parse(r.Payload);
+                    return JSON.parse(r);
                 } catch {
                     return null;
                 }
             }).filter(Boolean);
             rows.forEach((r, i) => {
-                if (parsed[i]) SP_ID_MAP[mapKey][parsed[i].id] = r.Id;
+                if (parsed[i]) SP_ID_MAP[mapKey][parsed[i].id] = r.id;
             });
             lsSet(lsKey, parsed);
             return parsed;
