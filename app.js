@@ -871,7 +871,7 @@ async function spCreate(listName, obj) {
 
 async function spUpdate(listName, spId, obj) {
     try {
-        await fetch('/api/spItemUpdate?list=' + listName, {
+        const response =await fetch('/api/spItemUpdate?list=' + listName, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -899,14 +899,14 @@ async function spUpdate(listName, spId, obj) {
 
 async function spDelete(listName, spId) {
     try {
-        await fetch('/api/spItemDelete?list=' + listName, {
+        const response = await fetch('/api/spItemDelete?list=' + listName, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ ItemID: spId })
         });
-
+        console.log("Item Deleted:", response);
         if (response.ok) {
             const data = await response.json();
             console.log("Success! Deleted Item ID:", data.id);
