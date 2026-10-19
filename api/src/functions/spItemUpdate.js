@@ -6,7 +6,7 @@ const { spListMap } = require('../utils/spListMap');
 require('isomorphic-fetch');
 
 app.http('spItemUpdate', {
-    methods: ['PATCH'],
+    methods: ['POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log('Processing request to update the SharePoint List item.');

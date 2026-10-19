@@ -97,7 +97,7 @@ const STR = {
         analyticsSub: 'Page views, content engagement, and click-throughs.',
         exportCsv: 'Export CSV',
         resetBtn: 'Reset',
-        scopeNote: ' < b > Scope note:</b > these metrics reflect activity captured on < b > this device / browser</b >.',
+        scopeNote: ' <b> Scope note:</b > these metrics reflect activity captured on <b> this device / browser</b>.',
         viewsTrend: 'Views \u2014 Last 14 Days(this device)',
         topContent: 'Top Content by Opens',
         engagementByCat: 'Engagement by Category',
@@ -174,13 +174,13 @@ const STR = {
         areYouSure: 'Are you sure?',
         delete: 'Delete',
         deletePermanently: 'Delete Permanently',
-        confirmMoveToTrash: 'Move "{d}" to the Recycle Bin? A Super Admin can restore it from there.',
+        confirmMoveToTrash: 'Move "{ d }" to the Recycle Bin? A Super Admin can restore it from there.',
         confirmDeleteUpdateTitle: 'Delete update?',
         confirmDeleteResourceTitle: 'Delete resource?',
         confirmPermanentDelete: 'Permanently delete this item? This cannot be undone.',
         confirmPermanentDeleteTitle: 'Permanently delete?',
         recycleBin: 'Recycle Bin',
-        deletedOn: 'Deleted {d}',
+        deletedOn: 'Deleted { d }',
         restore: 'Restore',
         noDeletedUpdates: 'No deleted updates.',
         noDeletedResources: 'No deleted resources.',
@@ -226,7 +226,7 @@ const STR = {
         analyticsSub: 'Vistas de p\xe1gina, interacci\xf3n con contenido y clics en enlaces.',
         exportCsv: 'Exportar CSV',
         resetBtn: 'Restablecer',
-        scopeNote: ' < b > Nota de alcance:</b > estas m\xe9tricas reflejan la actividad registrada en < b > este dispositivo / navegador</b >.',
+        scopeNote: ' <b> Nota de alcance:</b> estas m\xe9tricas reflejan la actividad registrada en <b> este dispositivo / navegador</b >.',
         viewsTrend: 'Vistas \u2014 \xdaltimos 14 D\xedas(este dispositivo)',
         topContent: 'Contenido M\xe1s Visto',
         engagementByCat: 'Interacci\xf3n por Categor\xeda',
@@ -303,7 +303,7 @@ const STR = {
         areYouSure: '\xbfEst\xe1s seguro ? ',
         delete: 'Eliminar',
         deletePermanently: 'Eliminar Permanentemente',
-        confirmMoveToTrash: '\xbfMover "{d}" a la Papelera de Reciclaje ? Un S\xfaper Administrador puede restaurarlo desde ah\xed.',
+        confirmMoveToTrash: '\xbfMover "{ d }" a la Papelera de Reciclaje ? Un S\xfaper Administrador puede restaurarlo desde ah\xed.',
         confirmDeleteUpdateTitle: '\xbfEliminar actualizaci\xf3n ? ',
         confirmDeleteResourceTitle: '\xbfEliminar recurso ? ',
         confirmPermanentDelete: '\xbfEliminar este elemento de forma permanente ? Esta acci\xf3n no se puede deshacer.',
@@ -886,7 +886,7 @@ async function spUpdate(listName, spId, obj) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Success! UpdatedItem ID:", data.id);
+            console.log("Success! Updated Item ID:", data.id);
 
             return data;
         } else {
@@ -898,14 +898,24 @@ async function spUpdate(listName, spId, obj) {
 }
 
 async function spDelete(listName, spId) {
-    const digest = await spDigest();
-    await fetch(SP_CONFIG.siteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items(" + spId + ")", {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json;odata=verbose', 'X-RequestDigest': digest, 'X-HTTP-Method': 'DELETE', 'If-Match': '*'
+    try {
+        await fetch('/api/spItemDelete?list=' + listName, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ItemID: spId })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! Deleted Item ID:", data.id);
+        } else {
+            console.error("Failed to delete item:", await response.text());
         }
-    });
+    } catch (error) {
+        console.error("Network error:", error);
+    }
 }
 
 const SP_ID_MAP = { items: {}, kb: {}, trash: {}, kbTrash: {} };
@@ -952,8 +962,7 @@ async function loadCollection(lsKey, seed, spList, mapKey) {
 async function pushCreate(spList, mapKey, obj) {
     if (!spReady()) return;
     try {
-        const r = await spCreate(spList, obj);
-        console.log('SharePoint create response:', r);  
+        const r = await spCreate(spList, obj); 
         if (r && r.d) SP_ID_MAP[mapKey][obj.id] = r.d.Id;
     } catch (e) {
         console.warn('SharePoint create failed, change kept locally only:', e);
