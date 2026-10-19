@@ -953,6 +953,7 @@ async function pushCreate(spList, mapKey, obj) {
     if (!spReady()) return;
     try {
         const r = await spCreate(spList, obj);
+        console.log('SharePoint create response:', r);  
         if (r && r.d) SP_ID_MAP[mapKey][obj.id] = r.d.Id;
     } catch (e) {
         console.warn('SharePoint create failed, change kept locally only:', e);
