@@ -1241,8 +1241,8 @@ function handleAdmin() {
     }
 }
 
-function doLogin() {
-    const u = getUser();
+async function doLogin() {
+    const u = await getUser();
     const rec = ADMINS[u.clientPrincipal.userDetails];
     if (rec) {
         adminMode = true; 
