@@ -7,7 +7,7 @@ require('isomorphic-fetch');
 
 app.http('spItemUpdate', {
     methods: ['POST'],
-    authLevel: 'anonymous',
+    authLevel: 'function',
     handler: async (request, context) => {
         context.log('Processing request to update the SharePoint List item.');
 
@@ -42,15 +42,15 @@ app.http('spItemUpdate', {
 
             const result = await graphClient
                 .api(`/sites/${siteId}/lists/${listId}/items/${itemId}/fields`)
-                .update(listItem);
+                .patch(listItem);
 
             return {
                 status: 200,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(result)
+                body: JSON.stringify({ message: 'List item updated successfully', data: result })
             };
         } catch (error) {
-            context.log(`Error querying Graph API: ${error.message}`);
+            context.log(`Error updating Sharepoint item: ${error.message}`);
             return {
                 status: 500,
                 body: `Internal Server Error: ${error.message}`
