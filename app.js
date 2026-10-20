@@ -885,10 +885,10 @@ async function spUpdate(listName, spId, obj) {
         });
 
         if (response.ok) {
-            const data = await response.json();
-            console.log("Success! Updated Item ID:", data.id);
+            const response = await response.json();
+            console.log("Success! Updated Item ID:", response.data.id);
 
-            return data;
+            return response.data;
         } else {
             console.error("Failed to update item:", await response.text());
         }
