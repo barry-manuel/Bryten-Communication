@@ -871,7 +871,7 @@ async function spCreate(listName, obj) {
 
 async function spUpdate(listName, spId, obj) {
     try {
-        const response =await fetch('/api/spItemUpdate?list=' + listName, {
+        const response = await fetch('/api/spItemUpdate?list=' + listName, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
