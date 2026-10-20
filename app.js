@@ -16,7 +16,7 @@ function toggleTheme() {
     const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
     const next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    document.getElementById('themeThumb').innerHTML = next === 'dark' ? ' <i class="ti ti-moon" ></i> ' : ' <i class="ti ti-sun" ></i> ';
+    document.getElementById('themeThumb').innerHTML = next === 'dark' ? '<i class="ti ti-moon" ></i>' : '<i class="ti ti-sun" ></i>';
     try {
         localStorage.setItem('bc_theme', next);
     } catch { }
