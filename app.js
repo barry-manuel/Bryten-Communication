@@ -2,8 +2,6 @@ async function getUser() {
     try {
         const response = await fetch('/.auth/me');
         const payload = await response.json();
-
-        console.log('User info:', payload);
         return payload;
     } catch (error) {
         console.error('Error fetching user info:', error);
