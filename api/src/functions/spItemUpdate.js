@@ -7,7 +7,7 @@ require('isomorphic-fetch');
 
 app.http('spItemUpdate', {
     methods: ['POST'],
-    authLevel: 'function',
+    authLevel: 'anonymous',
     handler: async (request, context) => {
         context.log('Processing request to update the SharePoint List item.');
 
@@ -33,11 +33,9 @@ app.http('spItemUpdate', {
             const body = await request.json();
             const itemId = body.ItemID; 
             const listItem = {
-                fields: {
                     Title: body.Title,
                     ItemKey: body.ItemKey,
                     Payload: body.Payload
-                }
             };
 
             const result = await graphClient
