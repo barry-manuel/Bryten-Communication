@@ -1230,16 +1230,6 @@ function setLang(l) {
     trackEvent('lang_switch', { lang: l });
 }
 
-function handleAdmin() {
-    adminMode ? logoutAdmin() : document.getElementById('loginOv').classList.add('open');
-    if (!adminMode) {
-        setTimeout(() => document.getElementById('lu').focus(), 80);
-        document.getElementById('lu').value = '';
-        document.getElementById('lp').value = '';
-        document.getElementById('lerr').style.display = 'none';
-    }
-}
-
 async function doLogin() {
     const u = await getUserInfo();
     const rec = ADMINS[u.userDetails];
@@ -1251,15 +1241,9 @@ async function doLogin() {
         applyAdmin();
         renderAll();
         trackEvent('admin_login', { role: curRole });
-    } else {
-        document.getElementById('lerr').textContent = t('loginErr');
-        document.getElementById('lerr').style.display = 'block';
-    }
+    } 
 }
-
-function closeLogin() {
-    document.getElementById('loginOv').classList.remove('open');
-}
+doLogin();
 
 function logoutAdmin() {
     adminMode = false;

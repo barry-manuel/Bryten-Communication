@@ -8,76 +8,6 @@
     <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div class="overlay" id="loginOv">
-      <div
-        class="modal"
-        style="width: 360px; text-align: center; padding: 32px"
-      >
-        <div
-          style="width: 44px; height: 32px; margin: 0 auto 14px"
-          id="loginLogoWrap"
-        ></div>
-        <div
-          style="
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--bryten-navy);
-            margin-bottom: 3px;
-          "
-          id="loginTitleTxt"
-        >
-          Admin Sign-In
-        </div>
-        <div class="eyebrow" style="margin-bottom: 20px" id="loginEyebrowTxt">
-          Bryten Communications Hub
-        </div>
-        <div class="frow" style="text-align: left">
-          <label class="flbl" id="luLbl">Username</label
-          ><input
-            class="finput"
-            type="text"
-            id="lu"
-            placeholder="Enter username"
-            onkeydown="if (event.key === 'Enter') doLogin();"
-          />
-        </div>
-        <div class="frow" style="text-align: left">
-          <label class="flbl" id="lpLbl">Password</label
-          ><input
-            class="finput"
-            type="password"
-            id="lp"
-            placeholder="Enter password"
-            onkeydown="if (event.key === 'Enter') doLogin();"
-          />
-        </div>
-        <div
-          style="
-            font-size: 11px;
-            color: var(--bryten-danger);
-            margin: 8px 0;
-            display: none;
-          "
-          id="lerr"
-        >
-          Incorrect credentials.
-        </div>
-        <button
-          class="btn btn-primary"
-          style="width: 100%; justify-content: center; margin-top: 14px"
-          onclick="doLogin()"
-        >
-          <span id="signInBtnTxt">Sign In</span>
-        </button>
-        <button
-          class="btn btn-tertiary"
-          style="margin-top: 8px; width: 100%; justify-content: center"
-          onclick="closeLogin()"
-        >
-          <span id="loginCancelTxt">Cancel</span>
-        </button>
-      </div>
-    </div>
     <div class="overlay" id="postOv">
       <div class="modal">
         <div class="mhdr">
@@ -463,7 +393,6 @@
               <button
                 class="btn btn-ghost"
                 id="adminBtn"
-                onclick="handleAdmin()"
               >
                 <i class="ti ti-lock"></i> <span id="adminBtnTxt">Admin</span>
               </button>
