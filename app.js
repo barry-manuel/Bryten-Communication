@@ -1236,7 +1236,6 @@ async function doLogin() {
         adminMode = true; 
         curUser = u.userDetails;
         curRole = rec.role;
-        closeLogin();
         applyAdmin();
         renderAll();
         trackEvent('admin_login', { role: curRole });
