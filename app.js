@@ -1239,7 +1239,9 @@ async function doLogin() {
         applyAdmin();
         renderAll();
         trackEvent('admin_login', { role: curRole });
-    } 
+    } else {
+        applyUser();
+    }
 }
 doLogin();
 
@@ -1249,6 +1251,13 @@ function logoutAdmin() {
     curRole = null;
     applyAdmin();
     renderAll();
+}
+
+function applyUser() {
+    const b = document.getElementById('adminBtn');
+    const rec = curUser || null;
+    b.innerHTML = `<i class="ti ti-lock-open"></i> ${sx(rec ? rec.name : curUser)}`;
+    b.className = 'btn btn-admin-on';
 }
 
 function applyAdmin() {
