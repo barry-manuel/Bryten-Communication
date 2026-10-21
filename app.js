@@ -1416,7 +1416,7 @@ function renderFChips() {
         l: t('filterAll')
     },
     ...CATKEYS.map(k => ({ k, l: getCatLabel(k) }))].map(({ k, l }) =>
-        `<button class="fchip ${k === 'alert' ? 'fchip-danger' : ''} ${activeFilt === k ? 'on' : ''}" onclick="setFilt('${k} ')">${sx(l)}</button>`).join('');
+        `<button class="fchip ${k === 'alert' ? 'fchip-danger' : ''} ${activeFilt === k ? 'on' : ''}" onclick="setFilt('${k}')">${sx(l)}</button>`).join('');
 }
 
 function setFilt(k) {
