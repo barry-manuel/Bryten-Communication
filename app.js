@@ -1,8 +1,9 @@
-async function getUser() {
+async function getUserInfo() {
     try {
         const response = await fetch('/.auth/me');
         const payload = await response.json();
-        return payload;
+        const { clientPrincipal } = payload;
+        return clientPrincipal;
     } catch (error) {
         console.error('Error fetching user info:', error);
     }
@@ -1240,11 +1241,11 @@ function handleAdmin() {
 }
 
 async function doLogin() {
-    const u = await getUser();
-    const rec = ADMINS[u.clientPrincipal.userDetails];
+    const u = await getUserInfo();
+    const rec = ADMINS[u.userDetails];
     if (rec) {
         adminMode = true; 
-        curUser = u.clientPrincipal.userDetails;
+        curUser = u.userDetails;
         curRole = rec.role;
         closeLogin();
         applyAdmin();
