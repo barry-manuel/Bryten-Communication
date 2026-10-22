@@ -969,6 +969,7 @@ async function pushCreate(spList, mapKey, obj) {
     try {
         const r = await spCreate(spList, obj); 
         if (r && r.d) SP_ID_MAP[mapKey][obj.id] = r.id;
+        await initData();
     } catch (e) {
         console.warn('SharePoint create failed, change kept locally only:', e);
     }
@@ -979,6 +980,7 @@ async function pushUpdate(spList, mapKey, obj) {
     const spId = SP_ID_MAP[mapKey][obj.id];
     if (!spId) {
         await pushCreate(spList, mapKey, obj);
+        await initData();
         return;
     } try {
         await spUpdate(spList, spId, obj);
@@ -994,6 +996,7 @@ async function pushDelete(spList, mapKey, objId) {
     try {
         await spDelete(spList, spId); 
         delete SP_ID_MAP[mapKey][objId];
+        await initData();
     } catch (e) {
         console.warn('SharePoint delete failed, change kept locally only:', e);
     }
@@ -2056,7 +2059,8 @@ function showIdeaMsg(text, type) {
     // navy background — use light colors for both states 
     msg.style.color = type === 'error' ? '#F08888' : 'rgba(245,240,232,.9)';
     msg.style.fontWeight = '600'; setTimeout(() => { msg.style.display = 'none'; }, 5000);
-} (async function init() {
+} 
+(async function init() {
     // Build clock strip immediately — before async data load so it's visible right away 
     buildClockStrip();
     updateClocks();
