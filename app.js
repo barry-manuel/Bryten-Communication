@@ -800,11 +800,14 @@ const SP_CONFIG = {
 let ADMINS = {};
 
 async function gAdmins() {
-    const data =[];
+    const data = {};
     try {
         const res = await spGetAll(SP_CONFIG.listAdmins);
         res.forEach(r => {
-            data[String(r.Username)] = { role: r.Role, name: r.Title };
+            data[r.Username] = {
+                name: r.Title,
+                role: r.Role
+            };
         })
         return data;
     } catch (error) {
