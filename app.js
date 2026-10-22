@@ -1249,7 +1249,7 @@ function logoutAdmin() {
 function applyUser() {
     const b = document.getElementById('adminBtn');
     const rec = curUser || 'Guest';
-    b.innerHTML = `<i class="ti ti-lock-open"></i> ${sx(rec ? rec.name : curUser)}`;
+    b.innerHTML = `<i class="ti ti-lock-open"></i> ${sx(rec)}`;
     b.className = 'btn btn-admin-on';
 }
 
