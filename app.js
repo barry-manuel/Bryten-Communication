@@ -808,7 +808,7 @@ async function gAdmins() {
                 role: r.Role
             };
         })
-        return;
+        return ADMINS;
     } catch (error) {
         console.error("Network error:", error);
     }
