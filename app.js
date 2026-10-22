@@ -1231,7 +1231,7 @@ function setLang(l) {
 async function doLogin() {
     const u = await getUserInfo();
     curUser = u.userDetails;
-    const rec = await ADMINS[u.userDetails];
+    const rec = await ADMINS[curUser];
     console.log('Current user:', curUser, 'Admin record:', rec);
     if (rec) {
         adminMode = true; 
