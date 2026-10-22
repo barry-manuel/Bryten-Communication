@@ -72,7 +72,7 @@ const STR = {
         hdrTitle: 'Bryten Central',
         manageAdmins: 'Manage Admins',
         postUpdate: 'Post Update',
-        adminBtnLabel: 'Admin',
+        adminBtnLabel: 'Guest',
         navHome: 'Home',
         navArchive: 'Archive',
         navKb: 'Knowledge Base',
