@@ -797,19 +797,18 @@ const SP_CONFIG = {
     analyticsEnabled: false, // set true once BrytenAnalytics list is created 
 };
 
-let ADMINS = [];
+let ADMINS = {};
 
 async function gAdmins() {
-    const data = [];
     try {
         const res = await spGetAll(SP_CONFIG.listAdmins);
         res.forEach(r => {
-            data[r.Username] = {
+            ADMINS[r.Username] = {
                 name: r.Title,
                 role: r.Role
             };
         })
-        return data;
+        return ADMINS;
     } catch (error) {
         console.error("Network error:", error);
     }
@@ -838,7 +837,7 @@ async function sAdmins(a) {
     }
 }
 
-ADMINS = gAdmins();
+gAdmins();
 
 function spReady() {
     return !!(SP_CONFIG.enabled && SP_CONFIG.siteUrl);
