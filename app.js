@@ -1231,7 +1231,6 @@ async function doLogin() {
     const a = await gAdmins();
     curUser = u.userDetails;
     const rec = a[curUser];
-    console.log('Current user:', curUser, 'Admin record:', rec);
     if (rec) {
         adminMode = true; 
         curRole = rec.role;
