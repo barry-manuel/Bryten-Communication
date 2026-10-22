@@ -805,7 +805,8 @@ async function gAdmins() {
         res.forEach(r => {
             ADMINS[r.Username] = {
                 name: r.Title,
-                role: r.Role
+                role: r.Role,
+                id: r.id
             };
         })
         return ADMINS;
@@ -1311,10 +1312,26 @@ function addAdmin() {
     renderAdmList();
 }
 
-function removeAdmin(u) {
-    showConfirm((LANG === 'es' ? '\xbfEliminar administrador @' : 'Remove admin @') + u + (LANG === 'es' ? '? Esta acci\xf3n no se puede deshacer.' : '? This cannot be undone.'), () => {
+async function removeAdmin(u) {
+    showConfirm((LANG === 'es' ? '\xbfEliminar administrador @' : 'Remove admin @') + u + (LANG === 'es' ? '? Esta acci\xf3n no se puede deshacer.' : '? This cannot be undone.'), async () => {
+        try {
+            const response = await fetch('/api/spItemDelete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ItemID: u.id })
+            });
+
+            if (response.ok) {
+                console.log("Success! Deleted Admin:", u.Title);
+            } else {
+                console.error("Failed to delete item:", await response.text());
+            }
+        } catch (error) {
+            console.error("Network error:", error);
+        }
         delete ADMINS[u];
-        sAdmins(ADMINS);
         renderAdmList();
     }, {
         title: LANG === 'es' ? '\xbfEliminar administrador?' : 'Remove admin?',

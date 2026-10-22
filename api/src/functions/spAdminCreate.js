@@ -33,7 +33,7 @@ app.http('spAdminCreate', {
             const body = await request.json();
             const listItem = {
                 fields: {
-                    Title: body.Name,
+                    Title: body.Title,
                     Username: body.Username,
                     Role: body.Role
                 }
