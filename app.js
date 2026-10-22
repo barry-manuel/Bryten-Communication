@@ -1230,6 +1230,7 @@ async function doLogin() {
     const u = await getUserInfo();
     curUser = u.userDetails;
     const rec = await ADMINS[u.userDetails];
+    console.log('Current user:', curUser, 'Admin record:', rec);
     if (rec) {
         adminMode = true; 
         curRole = rec.role;
