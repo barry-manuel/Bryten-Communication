@@ -797,7 +797,7 @@ const SP_CONFIG = {
     analyticsEnabled: false, // set true once BrytenAnalytics list is created 
 };
 
-let ADMINS = {};
+let ADMINS = [];
 
 async function gAdmins() {
     const data = {};
