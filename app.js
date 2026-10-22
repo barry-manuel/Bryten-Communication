@@ -969,6 +969,7 @@ async function pushCreate(spList, mapKey, obj) {
     try {
         const r = await spCreate(spList, obj); 
         if (r && r.d) SP_ID_MAP[mapKey][obj.id] = r.id;
+        await initData();
     } catch (e) {
         console.warn('SharePoint create failed, change kept locally only:', e);
     }
