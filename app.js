@@ -1224,10 +1224,10 @@ function setLang(l) {
 
 async function doLogin() {
     const u = await getUserInfo();
+    curUser = u.userDetails;
     const rec = ADMINS[u.userDetails];
     if (rec) {
         adminMode = true; 
-        curUser = u.userDetails;
         curRole = rec.role;
         applyAdmin();
         renderAll();
