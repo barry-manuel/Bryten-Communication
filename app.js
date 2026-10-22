@@ -334,38 +334,39 @@ function t(key, param) {
     return s;
 }
 
-let ADMINS = {
-    'tracie.culler@livebryten.com': {
-        role: 'super',
-        name: 'Tracie'
-    },
-    'suzette.cota@livebryten.com': {
-        role: 'super',
-        name: 'Suzette'
-    },
-    'itadmin@livebryten.com': {
-        role: 'super',
-        name: 'LeeShanok'
-    },
-    'barry.manuel@livebryten.com': {
-        role: 'super',
-        name: 'Barry'
-    }
-};
+let ADMINS = {};
 
-function gAdmins() {
+async function gAdmins() {
     try {
-        const s = localStorage.getItem('bc_admins');
-        return s ? JSON.parse(s) : ADMINS;
-    } catch {
-        return ADMINS;
+        const res = await spGetAll(SP_CONFIG.listAdmins);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Network error:", error);
     }
 }
 
-function sAdmins(a) {
+async function sAdmins(a) {
     try {
-        localStorage.setItem('bc_admins', JSON.stringify(a));
-    } catch { }
+        const response = await fetch('/api/spAdminCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(a)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! Created Admin:", data.Title);
+
+            return data;
+        } else {
+            console.error("Failed to add Admin:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
 }
 
 ADMINS = gAdmins();
@@ -596,16 +597,16 @@ function saveLog(l) {
 
 function sendAnalyticsEvent(evt) {
     if (!spReady() || !SP_CONFIG.analyticsEnabled || !SP_CONFIG.analyticsListName) return;
-    // POST analytics event to SharePoint list asynchronously (fire-and-forget) 
-    spDigest().then(digest => {
-        fetch(SP_CONFIG.siteUrl + "/_api/web/lists/getbytitle('" + SP_CONFIG.analyticsListName + "')/items", {
-            method: 'POST', credentials: 'same-origin',
-            headers: { 'Accept': 'application / json; odata = verbose', 'Content-Type': 'application / json; odata = verbose', 'X-RequestDigest': digest },
-            body: JSON.stringify({
-                Title: evt.type + '_' + evt.t, EventType: evt.type || '', Device: evt.device || '', Session: evt.session || '', ItemId: String(evt.itemId || evt.tab || ''), EventData: JSON.stringify(evt)
-            })
-        }).catch(() => { }); // silent fail — analytics should never break the app 
-    }).catch(() => { });
+
+    fetch('/api/getsharepointlist?list=' + SP_CONFIG.analyticsListName, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            Title: evt.type + '_' + evt.t, EventType: evt.type || '', Device: evt.device || '', Session: evt.session || '', ItemId: String(evt.itemId || evt.tab || ''), EventData: JSON.stringify(evt)
+        })
+    }).catch(() => { }); // silent fail — analytics should never break the app 
 }
 
 function trackEvent(type, meta) {
@@ -828,22 +829,13 @@ const SP_CONFIG = {
     listKb: 'BrytenKB',
     listTrash: 'BrytenTrash',
     listKbTrash: 'BrytenKBTrash',
+    listAdmins: 'BrytenCentralAdmins',
     analyticsListName: 'BrytenAnalytics', // set '' to disable SP analytics storage 
     analyticsEnabled: false, // set true once BrytenAnalytics list is created 
 };
 
 function spReady() {
     return !!(SP_CONFIG.enabled && SP_CONFIG.siteUrl);
-}
-
-async function spDigest() {
-    const res = await fetch(SP_CONFIG.siteUrl + "/_api/contextinfo", {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Accept': 'application/json;odata=verbose' }
-    });
-    const data = await res.json();
-    return data.d.GetContextWebInformation.FormDigestValue;
 }
 
 async function spGetAll(listName) {
@@ -1298,9 +1290,8 @@ function renderAdmList() {
 function addAdmin() {
     const name = document.getElementById('naName').value.trim();
     const user = document.getElementById('naUser').value.trim();
-    const pass = document.getElementById('naPass').value;
     const role = document.getElementById('naRole').value;
-    if (!name || !user || !pass) {
+    if (!name || !user) {
         alert(LANG === 'es' ? 'Por favor completa el nombre, usuario y contrase\xf1a.' : 'Please fill in name, username, and password.');
         return;
     }
@@ -1308,11 +1299,11 @@ function addAdmin() {
         alert(LANG === 'es' ? 'Ese nombre de usuario ya existe.' : 'That username already exists.');
         return;
     }
-    ADMINS[user] = { password: pass, role, name };
-    sAdmins(ADMINS);
+    
+    sAdmins({ Title: name, Username: user, Role: role});
+
     document.getElementById('naName').value = '';
     document.getElementById('naUser').value = '';
-    document.getElementById('naPass').value = ''; 
     renderAdmList();
 }
 
