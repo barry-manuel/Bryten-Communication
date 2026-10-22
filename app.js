@@ -969,7 +969,6 @@ async function pushCreate(spList, mapKey, obj) {
     try {
         const r = await spCreate(spList, obj); 
         if (r && r.d) SP_ID_MAP[mapKey][obj.id] = r.id;
-        await initData();
     } catch (e) {
         console.warn('SharePoint create failed, change kept locally only:', e);
     }
@@ -980,7 +979,6 @@ async function pushUpdate(spList, mapKey, obj) {
     const spId = SP_ID_MAP[mapKey][obj.id];
     if (!spId) {
         await pushCreate(spList, mapKey, obj);
-        await initData();
         return;
     } try {
         await spUpdate(spList, spId, obj);
@@ -1649,7 +1647,8 @@ function delKb(id) {
         saveKbLocal();
         saveTrashKbLocal();
         pushDelete(SP_CONFIG.listKb, 'kb', id);
-        pushCreate(SP_CONFIG.listKbTrash, 'kbTrash', trashed); renderKb();
+        pushCreate(SP_CONFIG.listKbTrash, 'kbTrash', trashed); 
+        renderKb();
     }, { title: t('confirmDeleteResourceTitle'), actionLabel: t('delete') });
 }
 
