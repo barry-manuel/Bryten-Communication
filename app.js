@@ -1229,7 +1229,7 @@ function setLang(l) {
 async function doLogin() {
     const u = await getUserInfo();
     curUser = u.userDetails;
-    const rec = ADMINS[u.userDetails];
+    const rec = await ADMINS[u.userDetails];
     if (rec) {
         adminMode = true; 
         curRole = rec.role;
@@ -1252,7 +1252,7 @@ function logoutAdmin() {
 
 function applyUser() {
     const b = document.getElementById('adminBtn');
-    const rec = curUser || 'Guest';
+    const rec = curUser;
     b.innerHTML = `<i class="ti ti-lock-open"></i> ${sx(rec)}`;
     b.className = 'btn btn-admin-on';
 }
