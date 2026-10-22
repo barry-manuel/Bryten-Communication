@@ -334,43 +334,6 @@ function t(key, param) {
     return s;
 }
 
-let ADMINS = {};
-
-async function gAdmins() {
-    try {
-        const res = await spGetAll(SP_CONFIG.listAdmins);
-        const data = await res.json();
-        return data;
-    } catch (error) {
-        console.error("Network error:", error);
-    }
-}
-
-async function sAdmins(a) {
-    try {
-        const response = await fetch('/api/spAdminCreate', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(a)
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            console.log("Success! Created Admin:", data.Title);
-
-            return data;
-        } else {
-            console.error("Failed to add Admin:", await response.text());
-        }
-    } catch (error) {
-        console.error("Network error:", error);
-    }
-}
-
-ADMINS = gAdmins();
-
 const CATS = {
     events: {
         label: {
@@ -833,6 +796,43 @@ const SP_CONFIG = {
     analyticsListName: 'BrytenAnalytics', // set '' to disable SP analytics storage 
     analyticsEnabled: false, // set true once BrytenAnalytics list is created 
 };
+
+let ADMINS = {};
+
+async function gAdmins() {
+    try {
+        const res = await spGetAll(SP_CONFIG.listAdmins);
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+async function sAdmins(a) {
+    try {
+        const response = await fetch('/api/spAdminCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(a)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! Created Admin:", data.Title);
+
+            return data;
+        } else {
+            console.error("Failed to add Admin:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+ADMINS = gAdmins();
 
 function spReady() {
     return !!(SP_CONFIG.enabled && SP_CONFIG.siteUrl);
