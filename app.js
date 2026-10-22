@@ -837,8 +837,6 @@ async function sAdmins(a) {
     }
 }
 
-gAdmins();
-
 function spReady() {
     return !!(SP_CONFIG.enabled && SP_CONFIG.siteUrl);
 }
@@ -1230,8 +1228,9 @@ function setLang(l) {
 
 async function doLogin() {
     const u = await getUserInfo();
+    const a = await gAdmins();
     curUser = u.userDetails;
-    const rec = await ADMINS[curUser];
+    const rec = a[curUser];
     console.log('Current user:', curUser, 'Admin record:', rec);
     if (rec) {
         adminMode = true; 
