@@ -800,16 +800,15 @@ const SP_CONFIG = {
 let ADMINS = [];
 
 async function gAdmins() {
-    const data = {};
     try {
         const res = await spGetAll(SP_CONFIG.listAdmins);
         res.forEach(r => {
-            data[r.Username] = {
+            ADMINS[r.Username] = {
                 name: r.Title,
                 role: r.Role
             };
         })
-        return data;
+        return;
     } catch (error) {
         console.error("Network error:", error);
     }
