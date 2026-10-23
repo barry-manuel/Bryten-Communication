@@ -1315,6 +1315,7 @@ function addAdmin() {
 async function removeAdmin(u) {
     showConfirm((LANG === 'es' ? '\xbfEliminar administrador @' : 'Remove admin @') + u + (LANG === 'es' ? '? Esta acci\xf3n no se puede deshacer.' : '? This cannot be undone.'), async () => {
         try {
+            console.log("Attempting to delete admin:", u);
             const response = await fetch('/api/spAdminDelete', {
                 method: 'POST',
                 headers: {
