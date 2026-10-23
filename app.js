@@ -1263,7 +1263,7 @@ function applyAdmin() {
     const b = document.getElementById('adminBtn');
     const rec = curUser ? ADMINS[curUser] : null;
     const roleBadge = rec ? `<span class="role-badge role-${rec.role}">${rec.role === 'super' ? t('roleSuperBadge') : t('roleEditorBadge')}</span>` : '';
-    b.innerHTML = adminMode ? `<i class="ti ti-lock-open"></i> ${sx(rec ? rec.name:curUser)}${roleBadge}` : `<i class="ti ti-lock"></i> <span id="adminBtnTxt">${t('adminBtnLabel')}</span>`;
+    b.innerHTML = adminMode ? `<i class="ti ti-lock-open"></i> ${sx(rec ? rec.name : curUser)}${roleBadge}` : `<i class="ti ti-lock"></i> <span id="adminBtnTxt">${curUser}</span>`;
     b.className = adminMode ? 'btn btn-admin-on' : 'btn btn-ghost';
     document.getElementById('postBtn').style.display = canEdit() ? 'inline-flex' : 'none';
     document.getElementById('kbAddBtn').style.display = canEdit() ? 'inline-flex' : 'none';
