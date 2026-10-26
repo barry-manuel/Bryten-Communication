@@ -1981,7 +1981,7 @@ async function renderRecognitionWall() {
     }
 }
 
-async function openRecogModal(editId) {
+function openRecogModal(editId) {
     if (!canEdit()) return; 
     _editRecogId = editId || null;
     const titleEl = document.getElementById('recogModalTitle');
@@ -2025,7 +2025,7 @@ async function saveRecognition() {
     }
     if (_editRecogId) {
         // Update existing recognition
-        console.log('Current recognition:', recogs[_editRecogId]);
+       await lsUpdateRecog({ _editRecogId, name, dept, body, body_es, by: by || 'Bryten Team', date })
         trackEvent('recognition_edited', { id: _editRecogId });
     } else {
         // Add new recognition
@@ -2039,10 +2039,10 @@ async function saveRecognition() {
     await renderRecognitionWall();
 }
 
-async function editRecog(id) {
+function editRecog(id) {
     if (!canEdit()) return;
     try {
-        await openRecogModal(id);
+        openRecogModal(id);
     } catch (e) {
         console.error('editRecog error:', e);
         alert('Edit error: ' + e.message);
