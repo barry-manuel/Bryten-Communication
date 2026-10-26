@@ -1903,6 +1903,7 @@ async function lsGetRecog() {
 function openRecogModal(editId) {
     if (!canEdit()) return;
     _editRecogId = editId || null;
+    console.log('Editing recognition with ID:', _editRecogId);
     const titleEl = document.getElementById('recogModalTitle');
     const saveEl = document.getElementById('recogSaveBtn');
     if (_editRecogId) {
@@ -1929,7 +1930,6 @@ function openRecogModal(editId) {
 
 function editRecog(id) {
     if (!canEdit()) return;
-    console.log('Editing recognition with ID:', id);
     try {
         openRecogModal(id);
     } catch (e) {
