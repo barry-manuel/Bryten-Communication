@@ -1008,17 +1008,6 @@ function saveTrashLocal() { lsSet('bc_trash_items', trashItems); }
 
 function saveTrashKbLocal() { lsSet('bc_trash_kb_items', trashKbItems); }
 
-async function initData() {
-    items = await loadCollection('bc_items', SEED_ITEMS, SP_CONFIG.listUpdates, 'items');
-    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, SP_CONFIG.listKb, 'kb');
-    trashItems = await loadCollection('bc_trash_items', [], SP_CONFIG.listTrash, 'trash');
-    trashKbItems = await loadCollection('bc_trash_kb_items', [], SP_CONFIG.listKbTrash, 'kbTrash');
-    const allIds = items.concat(trashItems).map(i => i.id);
-    const allKbIds = kbItems.concat(trashKbItems).map(i => i.id);
-    nid = 1 + Math.max(24, ...allIds, 0);
-    nkid = 1 + Math.max(9, ...allKbIds, 0);
-}
-
 function getTitle(item) {
     return LANG === 'es' && item.title_es ? item.title_es : item.title;
 }
@@ -1900,6 +1889,7 @@ function initOverlayListeners() {
 }
 
 /* ══════════════════════════ RECOGNITION WALL ══════════════════════════ */
+let recogs = [];
 async function lsGetRecog() {
     try {
         const s = await spGetAll(SP_CONFIG.listRecog);
@@ -1972,7 +1962,6 @@ async function renderRecognitionWall() {
     const adminAdd = document.getElementById('recogAdminAdd');
     if (!wall) return;
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
-    const recogs = await lsGetRecog();
     if (recogs) {
         console.log('Recognitions:', recogs);
         wall.innerHTML = recogs.map(r => {
@@ -2115,6 +2104,19 @@ function showIdeaMsg(text, type) {
     msg.style.color = type === 'error' ? '#F08888' : 'rgba(245,240,232,.9)';
     msg.style.fontWeight = '600'; setTimeout(() => { msg.style.display = 'none'; }, 5000);
 } 
+
+async function initData() {
+    items = await loadCollection('bc_items', SEED_ITEMS, SP_CONFIG.listUpdates, 'items');
+    kbItems = await loadCollection('bc_kb_items', SEED_KB_ITEMS, SP_CONFIG.listKb, 'kb');
+    trashItems = await loadCollection('bc_trash_items', [], SP_CONFIG.listTrash, 'trash');
+    trashKbItems = await loadCollection('bc_trash_kb_items', [], SP_CONFIG.listKbTrash, 'kbTrash');
+    recogs = await lsGetRecog();
+    const allIds = items.concat(trashItems).map(i => i.id);
+    const allKbIds = kbItems.concat(trashKbItems).map(i => i.id);
+    nid = 1 + Math.max(24, ...allIds, 0);
+    nkid = 1 + Math.max(9, ...allKbIds, 0);
+}
+
 (async function init() {
     // Build clock strip immediately — before async data load so it's visible right away 
     buildClockStrip();
