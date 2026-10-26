@@ -1865,17 +1865,17 @@ function saveKb() {
     renderKb();
 }
 
-function renderHome() {
+async function renderHome() {
     renderStats();
     renderAlerts();
     renderPinned();
     renderFChips();
     renderFeed();
-    renderRecognitionWall();
+    await renderRecognitionWall();
 }
 
-function renderAll() {
-    renderHome();
+async function renderAll() {
+    await renderHome();
 }
 
 function initOverlayListeners() {
@@ -2064,7 +2064,7 @@ async function deleteRecog(id) {
     if (!canEdit()) return;
     showConfirm('Delete this recognition? This cannot be undone.', async () => {
         await spDelete(SP_CONFIG.listRecog, id); 
-        renderRecognitionWall();
+        await renderRecognitionWall();
         trackEvent('recognition_deleted', { id });
     }, { title: 'Delete Recognition?', actionLabel: 'Delete' });
 }
