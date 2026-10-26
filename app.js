@@ -1894,7 +1894,7 @@ async function lsGetRecog() {
     try {
         const s = await spGetAll(SP_CONFIG.listRecog);
         console.log("Fetched Recognitions:", s);
-        return JSON.parse(s);
+        return s;
     } catch (error) {
         console.error("Error fetching recognitions:", error);
         return [];
