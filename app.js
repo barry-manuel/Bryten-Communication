@@ -1206,7 +1206,8 @@ function applyLanguage() {
         else if (prop === 'placeholder') el.placeholder = t(key);
     });
     refreshSelects();
-    applyAdmin(); if (typeof buildClockStrip === 'function') {
+    applyAdmin(); 
+    if (typeof buildClockStrip === 'function') {
         buildClockStrip();
         updateClocks();
     }
@@ -2132,7 +2133,6 @@ function showIdeaMsg(text, type) {
         initOverlayListeners();
         applyLanguage();
         setView(curView);
-        renderAll();
         trackPageView();
     } catch (err) {
         console.error('Bryten Central init error:', err);
