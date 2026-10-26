@@ -1900,6 +1900,43 @@ async function lsGetRecog() {
     }
 }
 
+function openRecogModal(editId) {
+    if (!canEdit()) return;
+    _editRecogId = editId || null;
+    const titleEl = document.getElementById('recogModalTitle');
+    const saveEl = document.getElementById('recogSaveBtn');
+    if (_editRecogId) {
+        const r = (recogs).find(x => x.id === _editRecogId);
+        if (!r) return; document.getElementById('recogName').value = r.Title || '';
+        document.getElementById('recogDept').value = r.RoleOrDept || '';
+        document.getElementById('recogBody').value = r.Body || '';
+        document.getElementById('recogBodyEs').value = r.BodyES || '';
+        document.getElementById('recogBy').value = r.PostedBy || '';
+        if (titleEl) titleEl.textContent = 'Edit Recognition';
+        if (saveEl) saveEl.textContent = 'Save Changes';
+    } else {
+        document.getElementById('recogName').value = '';
+        document.getElementById('recogDept').value = '';
+        document.getElementById('recogBody').value = '';
+        document.getElementById('recogBodyEs').value = '';
+        document.getElementById('recogBy').value = '';
+        if (titleEl) titleEl.textContent = 'Add Recognition';
+        if (saveEl) saveEl.textContent = 'Post Recognition';
+    }
+    document.getElementById('recogOv').classList.add('open');
+    setTimeout(() => document.getElementById('recogName').focus(), 80);
+}
+
+function editRecog(id) {
+    if (!canEdit()) return;
+    try {
+        openRecogModal(id);
+    } catch (e) {
+        console.error('editRecog error:', e);
+        alert('Edit error: ' + e.message);
+    }
+}
+
 async function lsSetRecog(r) {
     try {
         const response = await fetch('/api/spRecogCreate', {
@@ -1981,33 +2018,6 @@ async function renderRecognitionWall() {
     }
 }
 
-function openRecogModal(editId) {
-    if (!canEdit()) return; 
-    _editRecogId = editId || null;
-    const titleEl = document.getElementById('recogModalTitle');
-    const saveEl = document.getElementById('recogSaveBtn');
-    if (_editRecogId) {
-        const r = (recogs).find(x => x.id === _editRecogId);
-        if (!r) return; document.getElementById('recogName').value = r.Title || '';
-        document.getElementById('recogDept').value = r.RoleOrDept || '';
-        document.getElementById('recogBody').value = r.Body || '';
-        document.getElementById('recogBodyEs').value = r.BodyES || '';
-        document.getElementById('recogBy').value = r.PostedBy || '';
-        if (titleEl) titleEl.textContent = 'Edit Recognition';
-        if (saveEl) saveEl.textContent = 'Save Changes';
-    } else {
-        document.getElementById('recogName').value = '';
-        document.getElementById('recogDept').value = '';
-        document.getElementById('recogBody').value = '';
-        document.getElementById('recogBodyEs').value = '';
-        document.getElementById('recogBy').value = '';
-        if (titleEl) titleEl.textContent = 'Add Recognition';
-        if (saveEl) saveEl.textContent = 'Post Recognition';
-    }
-    document.getElementById('recogOv').classList.add('open');
-    setTimeout(() => document.getElementById('recogName').focus(), 80);
-}
-
 function closeRecogModal() {
     document.getElementById('recogOv').classList.remove('open'); _editRecogId = null;
 }
@@ -2037,16 +2047,6 @@ async function saveRecognition() {
     }
     closeRecogModal();
     await renderRecognitionWall();
-}
-
-function editRecog(id) {
-    if (!canEdit()) return;
-    try {
-        openRecogModal(id);
-    } catch (e) {
-        console.error('editRecog error:', e);
-        alert('Edit error: ' + e.message);
-    }
 }
 
 async function deleteRecog(id) {
