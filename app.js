@@ -1893,8 +1893,12 @@ let recogs = [];
 async function lsGetRecog() {
     try {
         const s = await spGetAll(SP_CONFIG.listRecog);
+        console.log("Fetched Recognitions:", s);
         return JSON.parse(s);
-    } catch { }
+    } catch (error) {
+        console.error("Error fetching recognitions:", error);
+        return [];
+    }
 }
 
 async function lsSetRecog(r) {
