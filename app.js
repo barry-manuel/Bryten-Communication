@@ -1977,6 +1977,7 @@ async function renderRecognitionWall() {
     if (!wall) return;
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
     const recogs = await lsGetRecog();
+    console.log('Fetched Recognitions:', recogs);
     if (!recogs.length) {
         const emptyMsg = LANG === 'es' ? 'Los reconocimientos aparecerán aquí.' : 'Recognitions will appear here.';
         const emptyHint = LANG === 'es' ? 'Los administradores pueden celebrar al equipo aquí.' : 'Admins can celebrate the team here.';
