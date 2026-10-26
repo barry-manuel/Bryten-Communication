@@ -1974,6 +1974,7 @@ async function renderRecognitionWall() {
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
     const recogs = await lsGetRecog();
     if (recogs) {
+        console.log('Recognitions:', recogs);
         wall.innerHTML = recogs.map(r => {
             const initials = r.name ? r.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?';
             const bodyText = getRecogBody(r);
