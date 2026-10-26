@@ -793,6 +793,7 @@ const SP_CONFIG = {
     listTrash: 'BrytenTrash',
     listKbTrash: 'BrytenKBTrash',
     listAdmins: 'BrytenCentralAdmins',
+    listRecog: 'BrytenRecog',
     analyticsListName: 'BrytenAnalytics', // set '' to disable SP analytics storage 
     analyticsEnabled: false, // set true once BrytenAnalytics list is created 
 };
@@ -1899,26 +1900,75 @@ function initOverlayListeners() {
 }
 
 /* ══════════════════════════ RECOGNITION WALL ══════════════════════════ */
-function lsGetRecog() {
+async function lsGetRecog() {
     try {
-        const s = localStorage.getItem('bc_recognitions');
+        const s = await spGetAll(SP_CONFIG.listRecog);
         if (s) {
             const p = JSON.parse(s);
-            if (p && p.length) return p;
+            if (p && p.length) 
+            return p;
         }
     } catch { }
     // Seed recognition if none stored yet 
-    const seed = [{ id: 1789411831887, name: 'Gina DaSilva', dept: 'Sr. Asset Director', body: "Gina (FL) received this glowing 5 star review on the Google Business Profile from a Client!\n⭐⭐⭐⭐⭐ \nBryten has been great. We have been with them since inception and our regional manager, Gina DaSilva, has been fantastic. We have also had strong community managers and have reached stabilization in a very competitive market. We even have direct access to the company president on an as needed basis. We are very pleased to be with Bryten.", body_es: "\u00a1Gina (Florida) ha recibido esta magn\u00edfica rese\u00f1a de 5 estrellas en el perfil de Google My Business por parte de un cliente!\n⭐⭐⭐⭐⭐ \nBryten ha sido estupenda. Llevamos con ellos desde sus inicios y nuestra responsable regional, Gina DaSilva, ha sido fant\u00e1stica. Tambi\u00e9n hemos contado con excelentes gestores de comunidad y hemos logrado estabilizarnos en un mercado muy competitivo. Incluso tenemos acceso directo al presidente de la empresa siempre que lo necesitamos. Estamos muy contentos de trabajar con Bryten.", by: 'Bryten Team', date: 'Sep 14, 2026' }];
+    const seed = [{ name: 'Gina DaSilva', dept: 'Sr. Asset Director', body: "Gina (FL) received this glowing 5 star review on the Google Business Profile from a Client!\n⭐⭐⭐⭐⭐ \nBryten has been great. We have been with them since inception and our regional manager, Gina DaSilva, has been fantastic. We have also had strong community managers and have reached stabilization in a very competitive market. We even have direct access to the company president on an as needed basis. We are very pleased to be with Bryten.", body_es: "\u00a1Gina (Florida) ha recibido esta magn\u00edfica rese\u00f1a de 5 estrellas en el perfil de Google My Business por parte de un cliente!\n⭐⭐⭐⭐⭐ \nBryten ha sido estupenda. Llevamos con ellos desde sus inicios y nuestra responsable regional, Gina DaSilva, ha sido fant\u00e1stica. Tambi\u00e9n hemos contado con excelentes gestores de comunidad y hemos logrado estabilizarnos en un mercado muy competitivo. Incluso tenemos acceso directo al presidente de la empresa siempre que lo necesitamos. Estamos muy contentos de trabajar con Bryten.", by: 'Bryten Team', date: 'Sep 14, 2026' }];
     try {
-        localStorage.setItem('bc_recognitions', JSON.stringify(seed));
+        await lsSetRecog(JSON.stringify(seed));
     } catch { }
     return seed;
 }
 
-function lsSetRecog(r) {
+async function lsSetRecog(r) {
     try {
-        localStorage.setItem('bc_recognitions', JSON.stringify(r));
-    } catch { }
+        const response = await fetch('/api/spRecogCreate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ Title: String(r.name), RoleOrDept: r.dept, Body: r.body, BodyES: r.body_es, PostedBy: r.by, PostedDate: r.date })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Success! Created Recognition ID:", data.id);
+
+            return data;
+        } else {
+            console.error("Failed to add Recognition:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
+}
+
+async function lsUpdateRecog(r) {
+    try {
+        const response = await fetch('/api/spRecogUpdate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Title: String(r.title || r.id),
+                ItemID: r.id,
+                RoleOrDept: r.dept,
+                Body: r.body,
+                BodyES: r.body_es,
+                PostedBy: r.by,
+                PostedDate: r.date
+            })
+        });
+
+        if (response.ok) {
+            const r = await response.json();
+            console.log("Success! Updated Item ID:", r.data.id);
+
+            return r.data;
+        } else {
+            console.error("Failed to update item:", await response.text());
+        }
+    } catch (error) {
+        console.error("Network error:", error);
+    }
 }
 
 let _editRecogId = null;
@@ -1978,7 +2028,7 @@ function closeRecogModal() {
     document.getElementById('recogOv').classList.remove('open'); _editRecogId = null;
 }
 
-function saveRecognition() {
+async function saveRecognition() {
     if (!canEdit()) return;
     const name = document.getElementById('recogName').value.trim();
     const dept = document.getElementById('recogDept').value.trim();
@@ -1989,17 +2039,19 @@ function saveRecognition() {
         alert('Please fill in the employee name and recognition message.');
         return;
     }
-    let recogs = lsGetRecog();
     if (_editRecogId) {
-        recogs = recogs.map(r => r.id === _editRecogId ? { ...r, name, dept, body, body_es, by: by || 'Bryten Team' } : r);
+        // Update existing recognition
+        const recogs = lsGetRecog();
+        console.log('Current recognition:', recogs[_editRecogId]);
         trackEvent('recognition_edited', { id: _editRecogId });
     } else {
+        // Add new recognition
         const now = new Date();
         const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        recogs.unshift({ id: Date.now(), name, dept, body, body_es, by: by || 'Bryten Team', date });
+        const recog = { name, dept, body, body_es, by: by || 'Bryten Team', date };
         trackEvent('recognition_posted', { name });
+        await lsSetRecog(recog);
     }
-    lsSetRecog(recogs);
     closeRecogModal();
     renderRecognitionWall();
 }
@@ -2014,11 +2066,10 @@ function editRecog(id) {
     }
 }
 
-function deleteRecog(id) {
+async function deleteRecog(id) {
     if (!canEdit()) return;
-    showConfirm('Delete this recognition? This cannot be undone.', () => {
-        let recogs = lsGetRecog().filter(r => r.id !== id);
-        lsSetRecog(recogs);
+    showConfirm('Delete this recognition? This cannot be undone.', async () => {
+        await spDelete(SP_CONFIG.listRecog, id); 
         renderRecognitionWall();
         trackEvent('recognition_deleted', { id });
     }, { title: 'Delete Recognition?', actionLabel: 'Delete' });
