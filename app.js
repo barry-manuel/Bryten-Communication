@@ -1971,12 +1971,12 @@ function getRecogBody(r) {
     return LANG === 'es' && r.body_es ? r.body_es : r.body;
 }
 
-function renderRecognitionWall() {
+async function renderRecognitionWall() {
     const wall = document.getElementById('recognitionWall');
     const adminAdd = document.getElementById('recogAdminAdd');
     if (!wall) return;
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
-    const recogs = lsGetRecog();
+    const recogs = await lsGetRecog();
     if (!recogs.length) {
         const emptyMsg = LANG === 'es' ? 'Los reconocimientos aparecerán aquí.' : 'Recognitions will appear here.';
         const emptyHint = LANG === 'es' ? 'Los administradores pueden celebrar al equipo aquí.' : 'Admins can celebrate the team here.';
@@ -1992,12 +1992,12 @@ function renderRecognitionWall() {
     }).join('');
 }
 
-function openRecogModal(editId) {
+async function openRecogModal(editId) {
     if (!canEdit()) return; _editRecogId = editId || null;
     const titleEl = document.getElementById('recogModalTitle');
     const saveEl = document.getElementById('recogSaveBtn');
     if (_editRecogId) {
-        const r = lsGetRecog().find(x => x.id === _editRecogId);
+        const r = (await lsGetRecog()).find(x => x.id === _editRecogId);
         if (!r) return; document.getElementById('recogName').value = r.name || '';
         document.getElementById('recogDept').value = r.dept || '';
         document.getElementById('recogBody').value = r.body || '';
@@ -2035,7 +2035,7 @@ async function saveRecognition() {
     }
     if (_editRecogId) {
         // Update existing recognition
-        const recogs = lsGetRecog();
+        const recogs = await lsGetRecog();
         console.log('Current recognition:', recogs[_editRecogId]);
         trackEvent('recognition_edited', { id: _editRecogId });
     } else {
@@ -2047,13 +2047,13 @@ async function saveRecognition() {
         await lsSetRecog(recog);
     }
     closeRecogModal();
-    renderRecognitionWall();
+    await renderRecognitionWall();
 }
 
-function editRecog(id) {
+async function editRecog(id) {
     if (!canEdit()) return;
     try {
-        openRecogModal(id);
+        await openRecogModal(id);
     } catch (e) {
         console.error('editRecog error:', e);
         alert('Edit error: ' + e.message);
