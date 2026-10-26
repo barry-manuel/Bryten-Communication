@@ -1909,16 +1909,6 @@ async function lsGetRecog() {
             return p;
         }
     } catch { }
-    // Seed recognition if none stored yet 
-    const seed = { name: 'Gina DaSilva', dept: 'Sr. Asset Director', body: "Gina (FL) received this glowing 5 star review on the Google Business Profile from a Client!\n⭐⭐⭐⭐⭐ \nBryten has been great. We have been with them since inception and our regional manager, Gina DaSilva, has been fantastic. We have also had strong community managers and have reached stabilization in a very competitive market. We even have direct access to the company president on an as needed basis. We are very pleased to be with Bryten.", body_es: "\u00a1Gina (Florida) ha recibido esta magn\u00edfica rese\u00f1a de 5 estrellas en el perfil de Google My Business por parte de un cliente!\n⭐⭐⭐⭐⭐ \nBryten ha sido estupenda. Llevamos con ellos desde sus inicios y nuestra responsable regional, Gina DaSilva, ha sido fant\u00e1stica. Tambi\u00e9n hemos contado con excelentes gestores de comunidad y hemos logrado estabilizarnos en un mercado muy competitivo. Incluso tenemos acceso directo al presidente de la empresa siempre que lo necesitamos. Estamos muy contentos de trabajar con Bryten.", by: 'Bryten Team', date: 'Sep 14, 2026' };
-    try {
-        await lsSetRecog(seed);
-        const s = await spGetAll(SP_CONFIG.listRecog);
-        if (s) {
-            const p = JSON.parse(s);
-            if (p && p.length) return p;
-        }
-    } catch { }
 }
 
 async function lsSetRecog(r) {
