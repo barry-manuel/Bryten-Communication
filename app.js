@@ -1903,12 +1903,13 @@ async function lsGetRecog() {
 function openRecogModal(editId) {
     if (!canEdit()) return;
     _editRecogId = editId || null;
-    console.log('Editing recognition with ID:', _editRecogId);
     const titleEl = document.getElementById('recogModalTitle');
     const saveEl = document.getElementById('recogSaveBtn');
     if (_editRecogId) {
         const r = (recogs).find(x => x.id === _editRecogId);
-        if (!r) return; document.getElementById('recogName').value = r.Title || '';
+        console.log('Editing recognition:', r);
+        if (!r) return; 
+        document.getElementById('recogName').value = r.Title || '';
         document.getElementById('recogDept').value = r.RoleOrDept || '';
         document.getElementById('recogBody').value = r.Body || '';
         document.getElementById('recogBodyEs').value = r.BodyES || '';
