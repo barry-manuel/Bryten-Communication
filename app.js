@@ -1893,7 +1893,6 @@ let recogs = [];
 async function lsGetRecog() {
     try {
         const s = await spGetAll(SP_CONFIG.listRecog);
-        console.log("Fetched Recognitions:", s);
         return s;
     } catch (error) {
         console.error("Error fetching recognitions:", error);
@@ -1958,7 +1957,7 @@ async function lsUpdateRecog(r) {
 let _editRecogId = null;
 
 function getRecogBody(r) {
-    return LANG === 'es' && r.body_es ? r.body_es : r.body;
+    return LANG === 'es' && r.BodyES ? r.BodyES : r.Body;
 }
 
 async function renderRecognitionWall() {
@@ -1969,7 +1968,7 @@ async function renderRecognitionWall() {
     if (recogs) {
         wall.innerHTML = recogs.map(r => {
             const initials = r.Title ? r.Title.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?';
-            const bodyText = getRecogBody(r.Body);
+            const bodyText = getRecogBody(r);
             const adminBtns = canEdit() ? ` <div style="display:flex;gap:4px;margin-top:6px;"> <button onclick="editRecog(${r.id})" style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--bryten-navy);background:transparent;color:var(--bryten-navy);cursor:pointer;font-weight:600;display:flex;align-items:center;gap:3px;"><i class="ti ti-pencil"></i> Edit</button> <button onclick="deleteRecog(${r.id})" style="font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid var(--bryten-danger);background:transparent;color:var(--bryten-danger);cursor:pointer;font-weight:600;display:flex;align-items:center;gap:3px;"><i class="ti ti-trash"></i> Delete</button> </div>` : '';
             const esTag = r.BodyES && LANG === 'es' ? `<span style="font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--bryten-blue);background:var(--bryten-blue-pale);padding:1px 5px;border-radius:6px;margin-left:5px;vertical-align:middle;">ES</span>` : '';
             return `<div class="recog-card" id="recog-${r.id}"> <div class="recog-card-header"> <div class="recog-avatar">${initials}</div> <div><div class="recog-name">${sx(r.Title)}${esTag}</div><div class="recog-dept">${sx(r.RoleOrDept || '')}</div></div> </div> <div class="recog-body">${sx(bodyText)}</div> <div class="recog-meta"><i class="ti ti-heart-filled" style="color:var(--bryten-gold);font-size:11px;"></i>${sx(r.PostedBy || 'Bryten Team')} &middot; ${sx(r.PostedDate || '')}</div> ${adminBtns} </div>`;
@@ -1983,16 +1982,17 @@ async function renderRecognitionWall() {
 }
 
 async function openRecogModal(editId) {
-    if (!canEdit()) return; _editRecogId = editId || null;
+    if (!canEdit()) return; 
+    _editRecogId = editId || null;
     const titleEl = document.getElementById('recogModalTitle');
     const saveEl = document.getElementById('recogSaveBtn');
     if (_editRecogId) {
-        const r = (await lsGetRecog()).find(x => x.id === _editRecogId);
-        if (!r) return; document.getElementById('recogName').value = r.name || '';
-        document.getElementById('recogDept').value = r.dept || '';
-        document.getElementById('recogBody').value = r.body || '';
-        document.getElementById('recogBodyEs').value = r.body_es || '';
-        document.getElementById('recogBy').value = r.by || '';
+        const r = (recogs).find(x => x.id === _editRecogId);
+        if (!r) return; document.getElementById('recogName').value = r.Title || '';
+        document.getElementById('recogDept').value = r.RoleOrDept || '';
+        document.getElementById('recogBody').value = r.Body || '';
+        document.getElementById('recogBodyEs').value = r.BodyES || '';
+        document.getElementById('recogBy').value = r.PostedBy || '';
         if (titleEl) titleEl.textContent = 'Edit Recognition';
         if (saveEl) saveEl.textContent = 'Save Changes';
     } else {
@@ -2025,7 +2025,6 @@ async function saveRecognition() {
     }
     if (_editRecogId) {
         // Update existing recognition
-        const recogs = await lsGetRecog();
         console.log('Current recognition:', recogs[_editRecogId]);
         trackEvent('recognition_edited', { id: _editRecogId });
     } else {
