@@ -1965,7 +1965,7 @@ async function renderRecognitionWall() {
     const adminAdd = document.getElementById('recogAdminAdd');
     if (!wall) return;
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
-    if (recogs) {
+    if (recogs && recogs.length) {
         wall.innerHTML = recogs.map(r => {
             const initials = r.Title ? r.Title.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?';
             const bodyText = getRecogBody(r);
