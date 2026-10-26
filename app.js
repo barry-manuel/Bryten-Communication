@@ -1903,11 +1903,7 @@ function initOverlayListeners() {
 async function lsGetRecog() {
     try {
         const s = await spGetAll(SP_CONFIG.listRecog);
-        if (s) {
-            const p = JSON.parse(s);
-            if (p && p.length) 
-            return p;
-        }
+        return JSON.parse(s);
     } catch { }
 }
 
@@ -1977,7 +1973,6 @@ async function renderRecognitionWall() {
     if (!wall) return;
     if (adminAdd) adminAdd.style.display = canEdit() ? 'block' : 'none';
     const recogs = await lsGetRecog();
-    console.log('Fetched Recognitions:', recogs);
     if (recogs) {
         wall.innerHTML = recogs.map(r => {
             const initials = r.name ? r.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?';
