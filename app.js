@@ -1929,6 +1929,7 @@ function openRecogModal(editId) {
 
 function editRecog(id) {
     if (!canEdit()) return;
+    console.log('Editing recognition with ID:', id);
     try {
         openRecogModal(id);
     } catch (e) {
