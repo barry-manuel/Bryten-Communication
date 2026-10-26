@@ -1922,8 +1922,6 @@ async function lsGetRecog() {
 }
 
 async function lsSetRecog(r) {
-    console.log("Saving recognition:", r);
-    return;
     try {
         const response = await fetch('/api/spRecogCreate', {
             method: 'POST',
