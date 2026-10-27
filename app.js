@@ -1907,7 +1907,6 @@ function openRecogModal(editId) {
     const saveEl = document.getElementById('recogSaveBtn');
     if (_editRecogId) {
         const r = recogs.find(item => item.id === String(_editRecogId));
-        console.log('Editing recognition:', r);
         if (!r) return; 
         document.getElementById('recogName').value = r.Title || '';
         document.getElementById('recogDept').value = r.RoleOrDept || '';
