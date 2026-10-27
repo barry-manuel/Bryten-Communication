@@ -1963,6 +1963,7 @@ async function lsSetRecog(r) {
 
 async function lsUpdateRecog(r) {
     try {
+        console.log("Updating recognition:", r);
         const response = await fetch('/api/spRecogUpdate', {
             method: 'POST',
             headers: {
