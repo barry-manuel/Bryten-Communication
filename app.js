@@ -561,7 +561,7 @@ function saveLog(l) {
 function sendAnalyticsEvent(evt) {
     if (!spReady() || !SP_CONFIG.analyticsEnabled || !SP_CONFIG.analyticsListName) return;
 
-    fetch('/api/getsharepointlist?list=' + SP_CONFIG.analyticsListName, {
+    fetch('/api/spAnalyticsCreate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -795,7 +795,7 @@ const SP_CONFIG = {
     listAdmins: 'BrytenCentralAdmins',
     listRecog: 'BrytenRecog',
     analyticsListName: 'BrytenAnalytics', // set '' to disable SP analytics storage 
-    analyticsEnabled: false, // set true once BrytenAnalytics list is created 
+    analyticsEnabled: true, // set true once BrytenAnalytics list is created 
 };
 
 let ADMINS = {};
