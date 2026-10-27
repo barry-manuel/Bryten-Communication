@@ -1,4 +1,15 @@
 {
+  "auth": {
+    "identityProviders": {
+      "azureActiveDirectory": {
+        "registration": {
+          "openIdIssuer": "https://login.microsoftonline.com/20a2ea90-3c8b-4e6f-b734-a3df3c54209b/v2.0",
+          "clientIdSettingName": "SHAREPOINT_CLIENT_ID",
+          "clientSecretSettingName": "SHAREPOINT_CLIENT_SECRET"
+        }
+      }
+    }
+  },
   "routes": [
     {
       "route": "/*",
