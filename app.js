@@ -2056,7 +2056,8 @@ async function saveRecognition() {
 async function deleteRecog(id) {
     if (!canEdit()) return;
     showConfirm('Delete this recognition? This cannot be undone.', async () => {
-        await spDelete(SP_CONFIG.listRecog, id); 
+        await spDelete(SP_CONFIG.listRecog, id);
+        recogs = await lsGetRecog(); 
         await renderRecognitionWall();
         trackEvent('recognition_deleted', { id });
     }, { title: 'Delete Recognition?', actionLabel: 'Delete' });
