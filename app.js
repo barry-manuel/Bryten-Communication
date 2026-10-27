@@ -1963,7 +1963,6 @@ async function lsSetRecog(r) {
 
 async function lsUpdateRecog(r) {
     try {
-        console.log("Updating recognition:", r);
         const response = await fetch('/api/spRecogUpdate', {
             method: 'POST',
             headers: {
@@ -1971,7 +1970,7 @@ async function lsUpdateRecog(r) {
             },
             body: JSON.stringify({
                 Title: String(r.title || r.id),
-                ItemID: r.id,
+                ItemID: r._editRecogId,
                 RoleOrDept: r.dept,
                 Body: r.body,
                 BodyES: r.body_es,
