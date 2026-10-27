@@ -1969,7 +1969,7 @@ async function lsUpdateRecog(r) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                Title: String(r.title || r.id),
+                Title: String(r.name),
                 ItemID: r._editRecogId,
                 RoleOrDept: r.dept,
                 Body: r.body,
