@@ -2031,6 +2031,8 @@ async function saveRecognition() {
     const body = document.getElementById('recogBody').value.trim();
     const body_es = document.getElementById('recogBodyEs').value.trim();
     const by = document.getElementById('recogBy').value.trim();
+    const now = new Date();
+    const date = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     if (!name || !body) {
         alert('Please fill in the employee name and recognition message.');
         return;
@@ -2047,6 +2049,7 @@ async function saveRecognition() {
         trackEvent('recognition_posted', { name });
         await lsSetRecog(recog);
     }
+    recogs = await lsGetRecog();
     closeRecogModal();
     await renderRecognitionWall();
 }
